@@ -14,7 +14,11 @@ This repository contains standalone external packages for the Nova / Edgent ecos
 
 ## Current Packages
 
+- `connector-skills` (`@topaca/connector-skills`)
 - `orchestration-core` (`@topaca/orchestration-core`)
+- `memory-core` (`@topaca/memory-core`)
+- `workflow-skills` (`@topaca/workflow-skills`)
+- `nova-status` (`@topaca/nova-status`)
 
 ## Scope
 
