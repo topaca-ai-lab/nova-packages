@@ -1,0 +1,56 @@
+{
+  "name": "@topaca/memory-core",
+  "version": "0.1.1",
+  "description": "Core memory runtime contracts for Nova / Edgent",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "RELEASING.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "shx rm -rf dist",
+    "build": "tsgo -p tsconfig.build.json",
+    "dev": "tsgo -p tsconfig.build.json --watch --preserveWatchOutput",
+    "check": "tsgo --noEmit -p tsconfig.build.json"
+  },
+  "keywords": [
+    "nova",
+    "edgent",
+    "memory",
+    "rag",
+    "retrieval"
+  ],
+  "author": "TOPACA AI-Lab (Markus Ertel) <hello@topaca.com>",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/topaca-ai-lab/nova-packages.git",
+    "directory": "memory-core"
+  },
+  "homepage": "https://github.com/topaca-ai-lab/nova-packages/tree/main/memory-core",
+  "bugs": {
+    "url": "https://github.com/topaca-ai-lab/nova-packages/issues"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "shx": "^0.4.0",
+    "typescript": "^5.7.3"
+  }
+}
