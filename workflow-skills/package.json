@@ -1,0 +1,56 @@
+{
+  "name": "@topaca/workflow-skills",
+  "version": "0.0.1",
+  "description": "Declarative workflow runtime for Nova/Edgent built on orchestration-core, connector-skills, and memory-core",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "RELEASING.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "shx rm -rf dist",
+    "build": "tsgo -p tsconfig.build.json",
+    "dev": "tsgo -p tsconfig.build.json --watch --preserveWatchOutput",
+    "check": "tsgo --noEmit -p tsconfig.build.json"
+  },
+  "keywords": [
+    "nova",
+    "edgent",
+    "workflow",
+    "automation",
+    "agent"
+  ],
+  "author": "TOPACA AI-Lab (Markus Ertel) <hello@topaca.com>",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/topaca-ai-lab/nova-packages.git",
+    "directory": "workflow-skills"
+  },
+  "homepage": "https://github.com/topaca-ai-lab/nova-packages/tree/main/workflow-skills",
+  "bugs": {
+    "url": "https://github.com/topaca-ai-lab/nova-packages/issues"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "shx": "^0.4.0",
+    "typescript": "^5.7.3"
+  }
+}
