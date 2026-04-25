@@ -1,0 +1,21 @@
+Nova / Edgent Dual Licensing
+
+Copyright (c) 2026 Nova Contributors
+
+This repository is offered under a dual-licensing model:
+
+1) Open Source License
+   GNU Affero General Public License, version 3 only ("AGPL-3.0-only")
+
+   SPDX identifier: AGPL-3.0-only
+   Canonical license text: https://www.gnu.org/licenses/agpl-3.0.txt
+
+2) Commercial License
+   A separate commercial license is available for users who want to use this
+   software in proprietary products or services without AGPL reciprocity
+   obligations.
+
+   See COMMERCIAL_LICENSE.md for scope and contact process.
+
+By using, modifying, or distributing this software under the open-source path,
+you agree to the AGPL-3.0-only terms.
