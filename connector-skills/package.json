@@ -1,6 +1,6 @@
 {
   "name": "@topaca/connector-skills",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Connector skill contracts and mock adapters for Nova (Mail, Calendar, Files, Messaging, Search, Browser, IDE, Media)",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,7 +13,8 @@
     "clean": "shx rm -rf dist",
     "build": "tsgo -p tsconfig.build.json",
     "dev": "tsgo -p tsconfig.build.json --watch --preserveWatchOutput",
-    "check": "tsgo --noEmit -p tsconfig.build.json"
+    "check": "tsgo --noEmit -p tsconfig.build.json",
+    "test": "tsx --test test/*.test.ts"
   },
   "keywords": [
     "nova",
@@ -38,6 +39,7 @@
     "@types/node": "^24.12.2",
     "@types/nodemailer": "^8.0.0",
     "shx": "^0.4.0",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
   "dependencies": {

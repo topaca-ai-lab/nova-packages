@@ -1,4 +1,4 @@
-import { Bot, type Api, type Context } from "grammy";
+import { Bot, type Context } from "grammy";
 import type { ConnectorCapabilityCheck } from "../envelope.js";
 import { ConnectorAuthError, ConnectorNotAvailableError } from "../errors.js";
 import type { MessagingConnector } from "../interfaces/messaging.js";
@@ -23,13 +23,15 @@ export interface TelegramMessagingOptions {
 export class TelegramMessagingConnector implements MessagingConnector {
 	readonly skillId = "messaging" as const;
 	private readonly bot: Bot;
+	private readonly enablePolling: boolean;
 	private readonly inboxBuffer: MessagingMessage[] = [];
 	private started = false;
 
 	constructor(options: TelegramMessagingOptions) {
 		this.bot = new Bot(options.botToken);
+		this.enablePolling = options.enablePolling ?? false;
 
-		if (options.enablePolling) {
+		if (this.enablePolling) {
 			this.bot.on("message:text", (ctx: Context) => {
 				this.inboxBuffer.push({
 					id: String(ctx.message?.message_id ?? Date.now()),
@@ -50,7 +52,12 @@ export class TelegramMessagingConnector implements MessagingConnector {
 				available: true,
 				backend: "telegram",
 				message: `Bot: @${me.username}`,
-				capabilities: { sendMessage: true, receiveMessages: true, getStatus: true, registerCommands: true },
+				capabilities: {
+					sendMessage: true,
+					receiveMessages: this.enablePolling,
+					getStatus: true,
+					registerCommands: true,
+				},
 			};
 		} catch (err) {
 			const msg = err instanceof Error ? err.message : String(err);
@@ -79,6 +86,12 @@ export class TelegramMessagingConnector implements MessagingConnector {
 	}
 
 	async receiveMessages(params: MessageReceiveParams): Promise<MessageReceiveResult> {
+		if (!this.enablePolling) {
+			throw new ConnectorNotAvailableError(
+				"telegram",
+				"Receiving messages requires enablePolling=true.",
+			);
+		}
 		if (!this.started) {
 			this.bot.start().catch(() => {});
 			this.started = true;

@@ -1,6 +1,7 @@
-import { readFile, readdir } from "node:fs/promises";
-import { join, basename, extname } from "node:path";
+import { readFile, readdir, writeFile } from "node:fs/promises";
+import { extname, resolve, sep } from "node:path";
 import type { ConnectorCapabilityCheck } from "../envelope.js";
+import { ConnectorValidationError } from "../errors.js";
 import type { IdeConnector } from "../interfaces/ide.js";
 import type {
 	IdeFileDiffParams,
@@ -42,9 +43,11 @@ const LANGUAGE_MAP: Record<string, string> = {
 export class LocalIdeConnector implements IdeConnector {
 	readonly skillId = "ide" as const;
 	private readonly root: string;
+	private readonly rootResolved: string;
 
 	constructor(options: LocalIdeOptions) {
 		this.root = options.workspaceRoot;
+		this.rootResolved = resolve(options.workspaceRoot);
 	}
 
 	async check(): Promise<ConnectorCapabilityCheck> {
@@ -68,7 +71,7 @@ export class LocalIdeConnector implements IdeConnector {
 	}
 
 	async fileOpen(params: IdeFileOpenParams): Promise<IdeFileOpenResult> {
-		const fullPath = this.resolve(params.path);
+		const fullPath = this.resolvePathWithinRoot(params.path);
 		try {
 			const content = await readFile(fullPath, "utf-8");
 			const lines = content.split("\n");
@@ -82,7 +85,10 @@ export class LocalIdeConnector implements IdeConnector {
 				},
 				opened: true,
 			};
-		} catch {
+		} catch (err) {
+			if (err instanceof ConnectorValidationError) {
+				throw err;
+			}
 			return {
 				file: { path: params.path, lineCount: 0, dirty: false },
 				opened: false,
@@ -92,8 +98,8 @@ export class LocalIdeConnector implements IdeConnector {
 
 	async fileDiff(params: IdeFileDiffParams): Promise<IdeFileDiffResult> {
 		const [contentA, contentB] = await Promise.all([
-			readFile(this.resolve(params.pathA), "utf-8").catch(() => ""),
-			readFile(this.resolve(params.pathB), "utf-8").catch(() => ""),
+			readFile(this.resolvePathWithinRoot(params.pathA), "utf-8").catch(() => ""),
+			readFile(this.resolvePathWithinRoot(params.pathB), "utf-8").catch(() => ""),
 		]);
 
 		const linesA = contentA.split("\n");
@@ -128,7 +134,7 @@ export class LocalIdeConnector implements IdeConnector {
 	}
 
 	async patchPropose(params: IdePatchProposeParams): Promise<IdePatchProposeResult> {
-		const fullPath = this.resolve(params.path);
+		const fullPath = this.resolvePathWithinRoot(params.path);
 		try {
 			const content = await readFile(fullPath, "utf-8");
 			const lines = content.split("\n");
@@ -136,7 +142,6 @@ export class LocalIdeConnector implements IdeConnector {
 			const removed = params.endLine - params.startLine + 1;
 			lines.splice(params.startLine - 1, removed, ...replacementLines);
 
-			const { writeFile } = await import("node:fs/promises");
 			await writeFile(fullPath, lines.join("\n"), "utf-8");
 
 			return { applied: true, path: params.path, linesChanged: replacementLines.length };
@@ -145,8 +150,16 @@ export class LocalIdeConnector implements IdeConnector {
 		}
 	}
 
-	private resolve(path: string): string {
-		if (path.startsWith("/")) return path;
-		return join(this.root, path);
+	private resolvePathWithinRoot(path: string): string {
+		const candidate = path.startsWith("/") ? resolve(path) : resolve(this.rootResolved, path);
+		const insideRoot = candidate === this.rootResolved || candidate.startsWith(`${this.rootResolved}${sep}`);
+		if (!insideRoot) {
+			throw new ConnectorValidationError(
+				`Path escapes workspace root: ${path}`,
+				"path",
+				{ workspaceRoot: this.rootResolved, resolvedPath: candidate },
+			);
+		}
+		return candidate;
 	}
 }

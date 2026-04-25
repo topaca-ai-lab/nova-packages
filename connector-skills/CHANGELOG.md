@@ -20,3 +20,12 @@ All notable changes to this project will be documented in this file.
 - Interface contracts for 8 skill families: Mail, Calendar, Files, Messaging, Search, Browser, IDE, Media
 - In-memory mock adapters for all 8 skill families
 - Unit tests for all mock adapters
+
+### Fixed
+
+- Prevented path traversal and workspace-root escapes in `LocalIdeConnector`.
+- Removed inline dynamic import usage in `LocalIdeConnector` and switched to top-level imports.
+- Propagated Playwright connector runtime errors instead of returning silent fallback values.
+- Aligned Telegram connector capability reporting with polling configuration (`receiveMessages` only when polling is enabled).
+- Added regression tests for IDE local adapter, Playwright adapter error mapping, and Telegram polling guard.
+- Added missing `test` script to match documented development workflow.

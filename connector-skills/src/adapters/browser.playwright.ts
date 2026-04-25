@@ -32,10 +32,16 @@ export interface PlaywrightPage {
 	goto(url: string, options?: { timeout?: number; waitUntil?: string }): Promise<{ status(): number | null } | null>;
 	click(selector: string, options?: { timeout?: number }): Promise<void>;
 	fill(selector: string, value: string, options?: { timeout?: number }): Promise<void>;
-	$$eval(selector: string, fn: (elements: any[]) => unknown): Promise<unknown>;
+	$$eval<T>(selector: string, fn: (elements: readonly PlaywrightDomElement[]) => T): Promise<T>;
 	screenshot(options?: { fullPage?: boolean; type?: string; path?: string }): Promise<Buffer>;
 	title(): Promise<string>;
 	url(): string;
+}
+
+export interface PlaywrightDomElement {
+	tagName?: string;
+	textContent?: string | null;
+	attributes?: readonly { name: string; value: string }[];
 }
 
 export interface PlaywrightBrowserOptions {
@@ -85,9 +91,8 @@ export class PlaywrightBrowserConnector implements BrowserConnector {
 			await this.page.click(params.selector, { timeout });
 			const title = await this.page.title();
 			return { clicked: true, page: { url: this.page.url(), title } };
-		} catch {
-			const title = await this.page.title();
-			return { clicked: false, page: { url: this.page.url(), title } };
+		} catch (err) {
+			throw this.mapError(err, timeout);
 		}
 	}
 
@@ -97,21 +102,21 @@ export class PlaywrightBrowserConnector implements BrowserConnector {
 			await this.page.fill(params.selector, params.value, { timeout });
 			const title = await this.page.title();
 			return { filled: true, page: { url: this.page.url(), title } };
-		} catch {
-			const title = await this.page.title();
-			return { filled: false, page: { url: this.page.url(), title } };
+		} catch (err) {
+			throw this.mapError(err, timeout);
 		}
 	}
 
 	async pageExtract(params: PageExtractParams): Promise<PageExtractResult> {
+		const timeout = this.defaultTimeout;
 		try {
-			const raw = await this.page.$$eval(params.selector, (els: any[]) => {
+			const raw = await this.page.$$eval(params.selector, (els) => {
 				return els.map((el) => ({
 					selector: "",
-					tagName: el.tagName.toLowerCase(),
+					tagName: el.tagName?.toLowerCase() ?? "unknown",
 					text: el.textContent?.trim() ?? undefined,
 					attributes: Object.fromEntries(
-						Array.from(el.attributes || []).map((a: any) => [a.name, a.value]),
+						Array.from(el.attributes ?? []).map((a) => [a.name, a.value]),
 					),
 				}));
 			});
@@ -119,8 +124,8 @@ export class PlaywrightBrowserConnector implements BrowserConnector {
 			const elements = raw as BrowserElement[];
 			const limit = params.limit ?? elements.length;
 			return { elements: elements.slice(0, limit) };
-		} catch {
-			return { elements: [] };
+		} catch (err) {
+			throw this.mapError(err, timeout);
 		}
 	}
 
