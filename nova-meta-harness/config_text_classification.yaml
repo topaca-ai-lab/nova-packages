@@ -1,0 +1,65 @@
+# Nova Package: Text Classification Configuration
+# Ported from nova-meta-harness reference example
+
+# Dataset configuration
+dataset:
+  num_train: 200
+  num_val: 50
+  num_test: 100
+  overrides:
+    sentiment:
+      num_train: 500
+      num_val: 100
+      num_test: 200
+    topic:
+      num_train: 300
+      num_val: 80
+      num_test: 150
+
+# Inner loop settings
+inner_loop:
+  mode: online
+  num_epochs: 1
+  temperature: 0.7
+  eval_interval: 0
+  batch_size: 1
+  seed: 42
+
+# Models to test
+models:
+  - model: nova-default
+    provider: nova
+  - model: gpt-4o
+    provider: openai
+
+# Benchmark settings
+benchmark:
+  seeds: [42]
+  concurrency: 4
+
+# Datasets for text classification
+datasets:
+  - sentiment
+  - topic
+  - emotion
+
+# Agent variants to test (ported from reference examples)
+memory_systems:
+  baselines:
+    - nova_text_classification_baseline
+    - nova_text_classification_fewshot
+  proposed: []  # Filled by Meta-Harness during evolution
+
+# Evaluation metrics
+evaluation:
+  primary_metric: accuracy
+  secondary_metrics:
+    - prediction_latency
+    - token_usage
+  success_threshold: 0.8  # 80% accuracy target
+
+# Nova-specific settings
+nova:
+  llm_endpoint: "https://api.nova.ai/v1/chat/completions"
+  default_temperature: 0.7
+  max_tokens: 4096

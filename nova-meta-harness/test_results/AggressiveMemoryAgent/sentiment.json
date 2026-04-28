@@ -1,0 +1,43 @@
+{
+  "agent": "AggressiveMemoryAgent",
+  "dataset": "sentiment",
+  "model": "nova-default",
+  "accuracy": 0.3333333333333333,
+  "correct": 1,
+  "total": 3,
+  "predictions": [
+    {
+      "input": "This is a positive example number 0....",
+      "prediction": "positive",
+      "ground_truth": "positive",
+      "was_correct": true,
+      "metadata": {
+        "prompt_length": 170,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a negative example number 1....",
+      "prediction": "positive",
+      "ground_truth": "negative",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 170,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a neutral example number 2....",
+      "prediction": "positive",
+      "ground_truth": "neutral",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 169,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    }
+  ]
+}

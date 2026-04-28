@@ -1,0 +1,63 @@
+# Nova-specific Meta-Harness configuration
+# This configures Meta-Harness to optimize Nova's agent harness
+
+# Dataset configuration for Nova benchmarks
+dataset:
+  num_train: 50        # Number of training tasks
+  num_val: 20          # Number of validation tasks  
+  num_test: 30          # Number of test tasks
+  overrides:
+    humaeneval:
+      num_train: 100
+      num_val: 50
+      num_test: 100
+    mbpp:
+      num_train: 100
+      num_val: 50
+      num_test: 100
+
+# Inner loop settings for Nova
+inner_loop:
+  mode: online           # Nova operates in online mode
+  num_epochs: 1
+  temperature: 0.7        # Some creativity for proposal generation
+  eval_interval: 0
+  batch_size: 1
+  seed: 42
+
+# Nova as the model being optimized
+# (and also as the proposer - meta-optimization)
+models:
+  - model: nova-default
+    provider: nova
+    api_base: https://api.nova.ai/v1
+
+# Benchmark settings for Nova evaluation
+benchmark:
+  seeds: [42, 123]
+  concurrency: 4          # Nova can handle fewer concurrent tasks
+
+# Nova-specific datasets (coding benchmarks)
+datasets:
+  - humaeneval
+  - mbpp
+  - gsm8k                # Math word problems
+  - codeforces            # Competitive programming
+
+# Nova harness variants to test
+memory_systems:
+  baselines:
+    - nova_baseline        # Current Nova configuration
+    - nova_agressive_memory  # More aggressive memory
+    - nova_conservative     # More conservative settings
+  proposed: []              # Filled by Meta-Harness during evolution
+
+# Nova-specific evaluation metrics
+evaluation:
+  primary_metric: pass_rate
+  secondary_metrics:
+    - latency_ms
+    - token_usage
+    - repair_count
+    - context_ratio
+  success_threshold: 0.8    # 80% pass rate target

@@ -1,0 +1,36 @@
+# Domain Spec: {{ domain_name }}
+
+## Domain Summary
+
+{{ summary }}
+
+**Problem framing:**
+- Unit of evaluation: {{ unit_of_evaluation }}
+- Frozen base model: {{ base_model }}
+- Budget: {{ budget }}
+
+## Harness and Search Plan
+
+{{ harness_plan }}
+
+**Baselines:** {{ baselines | join(", ") }}
+**Search space:** {{ search_space }}
+
+## Evaluation Plan
+
+{{ evaluation_plan }}
+
+**Metrics:** {{ metrics | join(", ") }}
+**Search set:** {{ search_set }}
+**Test set:** {{ test_set }}
+
+## Experience and Logging
+
+{{ experience_logging }}
+
+**Output directory:** `{{ logs_dir }}`
+**Trace format:** JSONL + JSON (compatible with Meta-Harness)
+
+## Open Questions and Unknowns
+
+{{ open_questions }}

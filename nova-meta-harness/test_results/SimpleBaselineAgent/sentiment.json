@@ -1,0 +1,120 @@
+{
+  "agent": "SimpleBaselineAgent",
+  "dataset": "sentiment",
+  "model": "nova-default",
+  "accuracy": 0.4,
+  "correct": 4,
+  "total": 10,
+  "predictions": [
+    {
+      "input": "This is a positive example number 0....",
+      "prediction": "positive",
+      "ground_truth": "positive",
+      "was_correct": true,
+      "metadata": {
+        "prompt_length": 123,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a negative example number 1....",
+      "prediction": "positive",
+      "ground_truth": "negative",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 123,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a neutral example number 2....",
+      "prediction": "positive",
+      "ground_truth": "neutral",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 122,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a positive example number 3....",
+      "prediction": "positive",
+      "ground_truth": "positive",
+      "was_correct": true,
+      "metadata": {
+        "prompt_length": 123,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a negative example number 4....",
+      "prediction": "positive",
+      "ground_truth": "negative",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 123,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a neutral example number 5....",
+      "prediction": "positive",
+      "ground_truth": "neutral",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 122,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a positive example number 6....",
+      "prediction": "positive",
+      "ground_truth": "positive",
+      "was_correct": true,
+      "metadata": {
+        "prompt_length": 123,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a negative example number 7....",
+      "prediction": "positive",
+      "ground_truth": "negative",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 123,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a neutral example number 8....",
+      "prediction": "positive",
+      "ground_truth": "neutral",
+      "was_correct": false,
+      "metadata": {
+        "prompt_length": 122,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    },
+    {
+      "input": "This is a positive example number 9....",
+      "prediction": "positive",
+      "ground_truth": "positive",
+      "was_correct": true,
+      "metadata": {
+        "prompt_length": 123,
+        "response_length": 46,
+        "raw_response": "{\"prediction\": \"positive\", \"confidence\": 0.85}"
+      }
+    }
+  ]
+}
